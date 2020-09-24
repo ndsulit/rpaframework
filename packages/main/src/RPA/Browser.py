@@ -20,6 +20,7 @@ from SeleniumLibrary.keywords import (
     AlertKeywords,
 )
 from selenium.webdriver import ChromeOptions
+from selenium.webdriver.chrome.webdriver import WebDriver as ChromiumDriver
 
 from RPA.core import locators, notebook, webdriver
 
@@ -468,11 +469,7 @@ class Browser(SeleniumLibrary):
         return self.open_chrome_browser(url, headless=True)
 
     @keyword
-    def screenshot(
-        self,
-        locator: str = None,
-        filename: str = "",
-    ) -> None:
+    def screenshot(self, locator: str = None, filename: str = "") -> None:
         # pylint: disable=C0301, W0212
         """Capture page and/or element screenshot.
 
@@ -1222,3 +1219,31 @@ class Browser(SeleniumLibrary):
         """
         browser_method = webbrowser.open_new_tab if tab else webbrowser.open_new
         browser_method(url)
+
+    @keyword
+    def set_geolocation(self, latitude, longitude, accuracy=100):
+        """Override the Geolocation API response the browser
+        sends to websites.
+
+        Note: Only supported by Chromium-based browsers
+
+        :param latitude:  Position latitude in decimal
+        :param longitude: Position longitude in decimal
+        :param accuracy:  Reported accuracy of location (0-100)
+
+        Example:
+            | Set Geolocation | 60.17 | 24.95 |
+        """
+        if not isinstance(self.driver, ChromiumDriver):
+            raise NotImplementedError(
+                "Geolocation override only supported by Chromium-based browsers"
+            )
+
+        self.driver.execute_cdp_cmd(
+            "Emulation.setGeolocationOverride",
+            {
+                "latitude": float(latitude),
+                "longitude": float(longitude),
+                "accuracy": int(accuracy),
+            },
+        )
