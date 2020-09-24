@@ -11,6 +11,9 @@ from typing import Any, List
 from selenium import webdriver
 from webdrivermanager import AVAILABLE_DRIVERS
 
+from RPA.core.types import is_list_like
+
+
 LOGGER = logging.getLogger(__name__)
 
 DRIVER_DIR = Path(tempfile.gettempdir()) / "drivers"
@@ -58,18 +61,18 @@ def executable(browser: str, download: bool = False) -> str:
     :param download: download driver binaries if they don't exist
     """
     LOGGER.debug(
-        "Webdriver initialization for '%s' (download: %s)",
-        browser,
-        download,
+        "Webdriver initialization for '%s' (download: %s)", browser, download,
     )
 
     browser = browser.lower().strip()
     factory = AVAILABLE_DRIVERS.get(browser)
-
     if not factory:
         return None
 
     driver_path = _driver_path(factory, download)
+    if driver_path is None:
+        LOGGER.debug("Failed to get driver path for %s", browser)
+        return None
 
     if driver_path.exists() and not download:
         LOGGER.debug("Attempting to use existing driver: %s", driver_path)
@@ -112,15 +115,25 @@ def _driver_path(factory: Any, download: bool) -> Any:
     else:
         manager = factory()
 
-    filename = manager.get_driver_filename()
+    driver_names = manager.get_driver_filename()
 
-    temp_path = Path(DRIVER_DIR) / filename
-    link_path = Path(manager.link_path) / filename
+    if driver_names is None:
+        return None
 
-    if temp_path.exists() or download:
-        return temp_path
-    else:
-        return link_path
+    if not is_list_like(driver_names):
+        driver_names = [driver_names]
+
+    if not download:
+        for name in driver_names:
+            temp_path = Path(DRIVER_DIR) / name
+            if temp_path.exists():
+                return temp_path
+
+            link_path = Path(manager.link_path) / name
+            if link_path.exists():
+                return link_path
+
+    return PATH(DRIVER_DIR) / driver_names[0]
 
 
 def _chrome_version() -> str:
@@ -172,19 +185,16 @@ def _download_driver(factory: Any, version: str = None) -> None:
             _set_executable_permissions(bin_path)
 
         LOGGER.debug(
-            "%s downloaded to %s",
-            manager.get_driver_filename(),
-            bin_path,
+            "%s downloaded to %s", manager.get_driver_filename(), bin_path,
         )
-    except RuntimeError:
-        pass
+    except Exception as exc:
+        raise RuntimeError(f"Failed to download wedriver: {exc}")
 
 
 def _set_executable_permissions(path: str) -> None:
     st = os.stat(path)
     os.chmod(
-        path,
-        st.st_mode | stat.S_IXOTH | stat.S_IXGRP | stat.S_IEXEC,
+        path, st.st_mode | stat.S_IXOTH | stat.S_IXGRP | stat.S_IEXEC,
     )
 
 
