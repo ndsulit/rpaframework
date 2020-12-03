@@ -21,6 +21,11 @@ def to_region(obj: Any) -> Optional["Region"]:
 
 
 @dataclass
+class Undefined:
+    """Internal placeholder for generic geometry."""
+
+
+@dataclass
 class Point:
     """Container for a 2D point."""
 
@@ -178,7 +183,9 @@ class Region:
 
     def contains(self, element: Union[Point, "Region"]) -> bool:
         """Check if a point or region is inside this region."""
-        if isinstance(element, Point):
+        if isinstance(element, Undefined):
+            return True
+        elif isinstance(element, Point):
             return (self.left <= element.x <= self.right) and (
                 self.top <= element.y <= self.bottom
             )

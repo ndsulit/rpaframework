@@ -12,7 +12,7 @@ from RPA.Desktop.keywords import (
     HAS_RECOGNITION,
 )
 
-from RPA.core.geometry import Point, Region
+from RPA.core.geometry import Point, Region, Undefined
 from RPA.core.locators import (
     Locator,
     PointLocator,
@@ -20,13 +20,13 @@ from RPA.core.locators import (
     RegionLocator,
     ImageLocator,
     OcrLocator,
-    parse_locator,
+    syntax,
 )
 
 if HAS_RECOGNITION:
     from RPA.recognition import templates, ocr  # pylint: disable=no-name-in-module
 
-Geometry = Union[Point, Region]
+Geometry = Union[Point, Region, Undefined]
 
 
 def ensure_recognition():
@@ -71,6 +71,7 @@ class FinderKeywords(LibraryContext):
 
     def __init__(self, ctx):
         super().__init__(ctx)
+        self._resolver = syntax.Resolver(self._find)
 
         self.timeout = 3.0
         if HAS_RECOGNITION:
@@ -78,37 +79,64 @@ class FinderKeywords(LibraryContext):
         else:
             self.confidence = 80.0
 
-    def _find(self, locator: str) -> List[Geometry]:
+    def _find(self, base: Geometry, locator: Locator) -> List[Geometry]:
         """Internal method for resolving and searching locators."""
         if isinstance(locator, (Region, Point)):
             return [locator]
 
-        locator: Locator = parse_locator(locator)
-        self.logger.info("Using locator: %s", locator)
+        self.logger.info("Finding locator: %s", locator)
 
         if isinstance(locator, PointLocator):
-            position = Point(locator.x, locator.y)
-            return [position]
+            return self._find_point(base, locator)
         elif isinstance(locator, OffsetLocator):
-            position = self.ctx.get_mouse_position()
-            position = position.move(locator.x, locator.y)
-            return [position]
+            return self._find_offset(base, locator)
         elif isinstance(locator, RegionLocator):
-            region = Region(locator.left, locator.top, locator.right, locator.bottom)
-            return [region]
+            return self._find_region(base, locator)
         elif isinstance(locator, ImageLocator):
-            ensure_recognition()
-            return self._find_templates(locator)
+            return self._find_templates(base, locator)
         elif isinstance(locator, OcrLocator):
-            ensure_recognition()
-            return self._find_ocr(locator)
+            return self._find_ocr(base, locator)
         else:
             raise NotImplementedError(f"Unsupported locator: {locator}")
 
-    def _find_templates(self, locator: ImageLocator) -> List[Region]:
+    def _find_point(self, base: Geometry, point: PointLocator):
+        if not isinstance(base, Undefined):
+            self.logger.warning("Using absolute point coordinates")
+
+        position = Point(point.x, point.y)
+        return [position]
+
+    def _find_offset(self, base: Geometry, offset: OffsetLocator):
+        if isinstance(base, Undefined):
+            position = self.ctx.get_mouse_position()
+        elif isinstance(base, Region):
+            position = base.center
+        else:
+            position = base
+
+        position = position.move(offset.x, offset.y)
+        return [position]
+
+    def _find_region(self, base: Geometry, region: RegionLocator):
+        if not isinstance(base, Undefined):
+            self.logger.warning("Using absolute region coordinates")
+
+        position = Region(region.left, region.top, region.right, region.bottom)
+        return [position]
+
+    def _find_templates(self, base: Geometry, locator: ImageLocator) -> List[Region]:
         """Find all regions that match given image template,
         inside the combined virtual display.
         """
+        ensure_recognition()
+
+        if isinstance(base, Undefined):
+            region = None
+        elif isinstance(base, Region):
+            region = base
+        else:
+            raise ValueError(f"Unsupported search specifier for template: {base}")
+
         confidence = locator.confidence or self.confidence
         self.logger.info("Matching with confidence of %.1f", confidence)
 
@@ -118,16 +146,26 @@ class FinderKeywords(LibraryContext):
                     image=image,
                     template=locator.path,
                     confidence=confidence,
+                    region=region,
                 )
             except templates.ImageNotFoundError:
                 return []
 
         return self._find_from_displays(finder)
 
-    def _find_ocr(self, locator: OcrLocator) -> List[Region]:
+    def _find_ocr(self, base: Geometry, locator: OcrLocator) -> List[Region]:
         """Find the position of all blocks of text that match the given string,
         inside the combined virtual display.
         """
+        ensure_recognition()
+
+        if isinstance(base, Undefined):
+            region = None
+        elif isinstance(base, Region):
+            region = base
+        else:
+            raise ValueError(f"Unsupported search specifier for OCR: {base}")
+
         confidence = locator.confidence or self.confidence
         self.logger.info("Matching with confidence of %.1f", confidence)
 
@@ -136,6 +174,7 @@ class FinderKeywords(LibraryContext):
                 image=image,
                 text=locator.text,
                 confidence=confidence,
+                region=region,
             )
 
             return [match["region"] for match in matches]
@@ -235,7 +274,8 @@ class FinderKeywords(LibraryContext):
                 Log    Found icon at ${match.x}, ${match.y}
             END
         """
-        matches = self._find(locator)
+        matches = self._resolver.dispatch(locator)
+        print(matches)
 
         display = self.ctx.get_display_dimensions()
         for match in matches:
