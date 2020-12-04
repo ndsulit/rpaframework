@@ -233,11 +233,11 @@ cffi = ">=1.8,<1.11.3 || >1.11.3"
 six = ">=1.4.1"
 
 [package.extras]
-docs = ["sphinx (>=1.6.5,<1.8.0 || >1.8.0)", "sphinx-rtd-theme"]
+docs = ["sphinx (>=1.6.5,!=1.8.0)", "sphinx-rtd-theme"]
 docstest = ["doc8", "pyenchant (>=1.6.11)", "twine (>=1.12.0)", "sphinxcontrib-spelling (>=4.0.1)"]
 idna = ["idna (>=2.1)"]
 pep8test = ["flake8", "flake8-import-order", "pep8-naming"]
-test = ["pytest (>=3.6.0,<3.9.0 || >3.9.0,<3.9.1 || >3.9.1,<3.9.2 || >3.9.2)", "pretend", "iso8601", "pytz", "hypothesis (>=1.11.4,<3.79.2 || >3.79.2)"]
+test = ["pytest (>=3.6.0,!=3.9.0,!=3.9.1,!=3.9.2)", "pretend", "iso8601", "pytz", "hypothesis (>=1.11.4,!=3.79.2)"]
 
 [[package]]
 name = "dataclasses"
@@ -591,7 +591,7 @@ python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*"
 [package.extras]
 dev = ["tox (>=3.0)", "flake8", "pep8-naming", "wheel", "twine"]
 docs = ["sphinx (>=1.7)", "sphinx-rtd-theme"]
-test = ["mock (>=2)", "pytest (>=3.4,<3.10.0 || >3.10.0)", "pytest-mock (>=1.8)", "pytest-cov"]
+test = ["mock (>=2)", "pytest (>=3.4,!=3.10.0)", "pytest-mock (>=1.8)", "pytest-cov"]
 
 [[package]]
 name = "grpcio"
@@ -636,7 +636,7 @@ zipp = ">=0.5"
 
 [package.extras]
 docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
-testing = ["pytest (>=3.5,<3.7.3 || >3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pytest-cov", "jaraco.test (>=3.2.0)", "packaging", "pep517", "pyfakefs", "flufl.flake8", "pytest-black (>=0.3.7)", "pytest-mypy", "importlib-resources (>=1.3)"]
+testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pytest-cov", "jaraco.test (>=3.2.0)", "packaging", "pep517", "pyfakefs", "flufl.flake8", "pytest-black (>=0.3.7)", "pytest-mypy", "importlib-resources (>=1.3)"]
 
 [[package]]
 name = "importlib-resources"
@@ -832,7 +832,7 @@ requests = ">=2.21.0"
 rfc3987 = ">=1.3.8"
 
 [package.extras]
-dev = ["alabaster (0.7.11)", "aspy.yaml (1.1.1)", "atomicwrites (1.1.5)", "attrs (18.1.0)", "babel (2.6.0)", "bumpversion (0.5.3)", "certifi (2018.4.16)", "cfgv (2.0.0)", "chardet (3.0.4)", "click (6.7)", "codecov (2.0.15)", "coverage (4.5.1)", "docutils (0.14)", "hypothesis (4.32.3)", "identify (1.1.4)", "idna (2.7)", "imagesize (1.0.0)", "importlib-metadata (0.18)", "jinja2 (2.10.1)", "markupsafe (1.0)", "more-itertools (4.2.0)", "nodeenv (1.3.2)", "packaging (17.1)", "pip-tools (4.0.0)", "pluggy (0.12.0)", "pre-commit (1.18.2)", "py (1.5.4)", "pygments (2.2.0)", "pyparsing (2.2.0)", "pytest-cov (2.7.1)", "pytest (5.0.1)", "pytz (2018.5)", "pyyaml (5.1)", "requests (2.22.0)", "six (1.11.0)", "snowballstemmer (1.2.1)", "sphinx-autodoc-annotation (1.0.post1)", "sphinx-rtd-theme (0.4.3)", "sphinx (2.2.0)", "sphinxcontrib-applehelp (1.0.1)", "sphinxcontrib-devhelp (1.0.1)", "sphinxcontrib-htmlhelp (1.0.2)", "sphinxcontrib-jsmath (1.0.1)", "sphinxcontrib-qthelp (1.0.2)", "sphinxcontrib-serializinghtml (1.1.3)", "toml (0.9.4)", "urllib3 (1.24.2)", "virtualenv (16.0.0)", "wcwidth (0.1.7)", "zipp (0.5.1)"]
+dev = ["alabaster (==0.7.11)", "aspy.yaml (==1.1.1)", "atomicwrites (==1.1.5)", "attrs (==18.1.0)", "babel (==2.6.0)", "bumpversion (==0.5.3)", "certifi (==2018.4.16)", "cfgv (==2.0.0)", "chardet (==3.0.4)", "click (==6.7)", "codecov (==2.0.15)", "coverage (==4.5.1)", "docutils (==0.14)", "hypothesis (==4.32.3)", "identify (==1.1.4)", "idna (==2.7)", "imagesize (==1.0.0)", "importlib-metadata (==0.18)", "jinja2 (==2.10.1)", "markupsafe (==1.0)", "more-itertools (==4.2.0)", "nodeenv (==1.3.2)", "packaging (==17.1)", "pip-tools (==4.0.0)", "pluggy (==0.12.0)", "pre-commit (==1.18.2)", "py (==1.5.4)", "pygments (==2.2.0)", "pyparsing (==2.2.0)", "pytest-cov (==2.7.1)", "pytest (==5.0.1)", "pytz (==2018.5)", "pyyaml (==5.1)", "requests (==2.22.0)", "six (==1.11.0)", "snowballstemmer (==1.2.1)", "sphinx-autodoc-annotation (==1.0.post1)", "sphinx-rtd-theme (==0.4.3)", "sphinx (==2.2.0)", "sphinxcontrib-applehelp (==1.0.1)", "sphinxcontrib-devhelp (==1.0.1)", "sphinxcontrib-htmlhelp (==1.0.2)", "sphinxcontrib-jsmath (==1.0.1)", "sphinxcontrib-qthelp (==1.0.2)", "sphinxcontrib-serializinghtml (==1.1.3)", "toml (==0.9.4)", "urllib3 (==1.24.2)", "virtualenv (==16.0.0)", "wcwidth (==0.1.7)", "zipp (==0.5.1)"]
 
 [[package]]
 name = "ntlm-auth"
@@ -850,7 +850,7 @@ name = "numpy"
 version = "1.19.3"
 description = "NumPy is the fundamental package for array computing with Python."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.6"
 
 [[package]]
@@ -871,7 +871,7 @@ name = "opencv-python"
 version = "4.4.0.46"
 description = "Wrapper package for OpenCV python bindings."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.6"
 
 [package.dependencies]
@@ -1153,7 +1153,7 @@ name = "pytesseract"
 version = "0.3.6"
 description = "Python-tesseract is a python wrapper for Google's Tesseract-OCR"
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [package.dependencies]
@@ -1179,7 +1179,7 @@ py = ">=1.8.2"
 toml = "*"
 
 [package.extras]
-checkqa_mypy = ["mypy (0.780)"]
+checkqa_mypy = ["mypy (==0.780)"]
 testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "requests", "xmlschema"]
 
 [[package]]
@@ -1195,7 +1195,7 @@ coverage = ">=4.4"
 pytest = ">=4.6"
 
 [package.extras]
-testing = ["fields", "hunter", "process-tests (2.0.2)", "six", "pytest-xdist", "virtualenv"]
+testing = ["fields", "hunter", "process-tests (==2.0.2)", "six", "pytest-xdist", "virtualenv"]
 
 [[package]]
 name = "python-dateutil"
@@ -1273,7 +1273,7 @@ urllib3 = ">=1.21.1,<1.27"
 
 [package.extras]
 security = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)"]
-socks = ["PySocks (>=1.5.6,<1.5.7 || >1.5.7)", "win-inet-pton"]
+socks = ["PySocks (>=1.5.6,!=1.5.7)", "win-inet-pton"]
 
 [[package]]
 name = "requests-file"
@@ -1409,36 +1409,26 @@ version = "4.0.2"
 description = "Core utilities used by RPA Framework"
 category = "main"
 optional = false
-python-versions = "^3.6"
-develop = false
+python-versions = ">=3.6,<4.0"
 
 [package.dependencies]
 selenium = ">=3.141.0,<4.0.0"
 webdrivermanager = ">=0.9.0,<0.10.0"
-
-[package.source]
-type = "directory"
-url = "../core"
 
 [[package]]
 name = "rpaframework-recognition"
 version = "0.5.0"
 description = "Core utilities used by RPA Framework"
 category = "main"
-optional = false
-python-versions = "^3.6"
-develop = false
+optional = true
+python-versions = ">=3.6,<4.0"
 
 [package.dependencies]
 numpy = "1.19.3"
 opencv-python = ">=4.4.0,<5.0.0"
 pillow = ">=8.0.1,<9.0.0"
 pytesseract = ">=0.3.6,<0.4.0"
-rpaframework-core = "4.0.2"
-
-[package.source]
-type = "directory"
-url = "../recognition"
+rpaframework-core = ">=4.0.1,<5.0.0"
 
 [[package]]
 name = "rsa"
@@ -1599,7 +1589,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4"
 [package.extras]
 brotli = ["brotlipy (>=0.6.0)"]
 secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "certifi", "ipaddress"]
-socks = ["PySocks (>=1.5.6,<1.5.7 || >1.5.7,<2.0)"]
+socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [[package]]
 name = "webdrivermanager"
@@ -1679,7 +1669,7 @@ requests-toolbelt = ">=0.7.1"
 [package.extras]
 async = ["httpx"]
 docs = ["sphinx (>=1.4.0)"]
-test = ["coverage[toml] (5.2.1)", "freezegun (0.3.15)", "mock (2.0.0)", "pretend (1.0.9)", "pytest-cov (2.8.1)", "pytest-httpx", "pytest-asyncio", "pytest (6.0.1)", "requests-mock (>=0.7.0)", "isort (5.3.2)", "flake8 (3.8.3)", "flake8-blind-except (0.1.1)", "flake8-debugger (3.2.1)", "flake8-imports (0.1.1)"]
+test = ["coverage[toml] (==5.2.1)", "freezegun (==0.3.15)", "mock (==2.0.0)", "pretend (==1.0.9)", "pytest-cov (==2.8.1)", "pytest-httpx", "pytest-asyncio", "pytest (==6.0.1)", "requests-mock (>=0.7.0)", "isort (==5.3.2)", "flake8 (==3.8.3)", "flake8-blind-except (==0.1.1)", "flake8-debugger (==3.2.1)", "flake8-imports (==0.1.1)"]
 xmlsec = ["xmlsec (>=0.6.1)"]
 
 [[package]]
@@ -1692,7 +1682,7 @@ python-versions = ">=3.6"
 
 [package.extras]
 docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
-testing = ["pytest (>=3.5,<3.7.3 || >3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pytest-cov", "jaraco.test (>=3.2.0)", "jaraco.itertools", "func-timeout", "pytest-black (>=0.3.7)", "pytest-mypy"]
+testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pytest-cov", "jaraco.test (>=3.2.0)", "jaraco.itertools", "func-timeout", "pytest-black (>=0.3.7)", "pytest-mypy"]
 
 [extras]
 aws = ["boto3"]
@@ -1702,7 +1692,7 @@ google = ["google-api-python-client", "google-auth-httplib2", "google-auth-oauth
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "d655d995222f3491b9db1bad8c4d16dffecce15a5b73eb6dc6073ac450a32d76"
+content-hash = "3851955ed5e3eb2f2480abebad5d2065ae3883daab9714793211756e0fc308ce"
 
 [metadata.files]
 appdirs = [
@@ -2588,8 +2578,14 @@ robotframework-seleniumlibrary = [
 robotframework-seleniumtestability = [
     {file = "robotframework-seleniumtestability-1.1.0.tar.gz", hash = "sha256:18810869a0c0010cc623aea4bb382afdc9aa6fe8404c35fa58452766d0322735"},
 ]
-rpaframework-core = []
-rpaframework-recognition = []
+rpaframework-core = [
+    {file = "rpaframework-core-4.0.2.tar.gz", hash = "sha256:555d18889bf5b425896db363316dcd372a8a734a56294ba589d62b47e4f24145"},
+    {file = "rpaframework_core-4.0.2-py3-none-any.whl", hash = "sha256:1f5577c05bef8f8dff3b584ffb68102d1213ac82307ab8521cdb5b81736e41e5"},
+]
+rpaframework-recognition = [
+    {file = "rpaframework-recognition-0.5.0.tar.gz", hash = "sha256:dd4ae959b9de7b1006636f66f28cfbe28200434eb1499b79f3924626b2e1d978"},
+    {file = "rpaframework_recognition-0.5.0-py3-none-any.whl", hash = "sha256:1b4294637ea89ae2b6273e263c73c95b2a3b0586ba8266f529bc5ec0c39d007d"},
+]
 rsa = [
     {file = "rsa-4.6-py3-none-any.whl", hash = "sha256:6166864e23d6b5195a5cfed6cd9fed0fe774e226d8f854fcb23b7bbef0350233"},
     {file = "rsa-4.6.tar.gz", hash = "sha256:109ea5a66744dd859bf16fe904b8d8b627adafb9408753161e766a92e7d681fa"},
